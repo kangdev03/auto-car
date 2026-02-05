@@ -1,15 +1,16 @@
 import Car from "../models/car.model.js";
 
-export const getCars = async (req, res) => {
+export const getCars = async (req, res, next) => {
   try {
     const cars = await Car.find().sort({ createdAt: -1 });
     res.render("car/index", { cars });
   } catch (err) {
-    res.render("error", { message: "Internal server error" });
+    console.error("Error in getCars:", err);
+    next(err);
   }
 };
 
-export const searchCars = async (req, res) => {
+export const searchCars = async (req, res, next) => {
   try {
     const { keyword, name, status, minPrice, maxPrice } = req.query;
     const filter = {};
@@ -27,6 +28,7 @@ export const searchCars = async (req, res) => {
     const cars = await Car.find(filter);
     res.render("car/index", { cars });
   } catch (err) {
-    res.render("error", { message: "Internal server error" });
+    console.error("Error in searchCars:", err);
+    next(err);
   }
 };

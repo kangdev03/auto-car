@@ -1,6 +1,6 @@
 import Booking from "../models/booking.model.js";
 
-export const getUserBookings = async (req, res) => {
+export const getUserBookings = async (req, res, next) => {
   try {
     const userId = req.params.id;
 
@@ -17,13 +17,12 @@ export const getUserBookings = async (req, res) => {
       bookings
     });
   } catch (err) {
-    res.render("error", {
-      message: err.message || "Internal server error"
-    });
+    console.error("Error in getUserBookings:", err);
+    next(err);
   }
 };
 
-export const getMyCarBookings = async (req, res) => {
+export const getMyCarBookings = async (req, res, next) => {
   try {
     const ownerId = req.user.id; 
 
@@ -40,13 +39,12 @@ export const getMyCarBookings = async (req, res) => {
       bookings: ownerBookings
     });
   } catch (err) {
-    res.render("error", {
-      message: err.message || "Internal server error"
-    });
+    console.error("Error in getMyCarBookings:", err);
+    next(err);
   }
 };
 
-export const getBookingSummary = async (req, res) => {
+export const getBookingSummary = async (req, res, next) => {
   try {
     const total = await Booking.countDocuments();
 
@@ -69,8 +67,7 @@ export const getBookingSummary = async (req, res) => {
       byStatus
     });
   } catch (err) {
-    res.render("error", {
-      message: err.message || "Internal server error"
-    });
+    console.error("Error in getBookingSummary:", err);
+    next(err);
   }
 };

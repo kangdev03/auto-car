@@ -16,20 +16,31 @@ const __dirname = path.dirname(__filename);
 dotenv.config();
 const app = express();
 
-// Connect to DB with error handling
-connectDB().catch(err => {
-  console.error("Failed to connect to MongoDB:", err);
-});
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Ensure DB connection before processing requests
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("Database connection failed:", err);
+    next(err);
+  }
+});
 
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "car-rental-secret-key",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 } // 24 giờ
+    cookie: { 
+      maxAge: 24 * 60 * 60 * 1000, // 24 giờ
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "lax"
+    }
   })
 );
 
@@ -40,6 +51,11 @@ app.use((req, res, next) => {
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
 
 app.get("/", (req, res) => {
   res.redirect("/cars");

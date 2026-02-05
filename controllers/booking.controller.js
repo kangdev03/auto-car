@@ -4,17 +4,18 @@ import User from "../models/user.model.js";
 import Contract from "../models/contract.model.js";
 import AppError from "../utils/AppError.js";
 
-export const showCreateBookingForm = async (req, res) => {
+export const showCreateBookingForm = async (req, res, next) => {
   try {
     const cars = await Car.find({ status: "available" }).sort({ name: 1 });
     const preselectedCarId = req.query.carId || null;
     res.render("booking/create", { cars, preselectedCarId });
   } catch (err) {
-    res.render("error", { message: err.message });
+    console.error("Error in showCreateBookingForm:", err);
+    next(err);
   }
 };
 
-export const getBookings = async (req, res) => {
+export const getBookings = async (req, res, next) => {
   try {
     const filter = {};
     if (req.query.userId) filter.user_id = req.query.userId;
@@ -25,11 +26,12 @@ export const getBookings = async (req, res) => {
 
     res.render("booking/index", { bookings });
   } catch (err) {
-    res.render("error", { message: err.message });
+    console.error("Error in getBookings:", err);
+    next(err);
   }
 };
 
-export const getBookingDetail = async (req, res) => {
+export const getBookingDetail = async (req, res, next) => {
   try {
     const booking = await Booking.findById(req.params.id)
       .populate("user_id")
@@ -41,11 +43,12 @@ export const getBookingDetail = async (req, res) => {
 
     res.render("booking/detail", { booking });
   } catch (err) {
-    res.render("error", { message: err.message });
+    console.error("Error in getBookingDetail:", err);
+    next(err);
   }
 };
 
-export const createBooking = async (req, res) => {
+export const createBooking = async (req, res, next) => {
   try {
     const userId = req.user?.id || req.body.userId;
     if (!userId) {
@@ -77,11 +80,12 @@ export const createBooking = async (req, res) => {
 
     res.redirect("/bookings");
   } catch (err) {
-    res.render("error", { message: err.message });
+    console.error("Error in createBooking:", err);
+    next(err);
   }
 };
 
-export const confirmBooking = async (req, res) => {
+export const confirmBooking = async (req, res, next) => {
   try {
     const booking = await Booking.findById(req.params.bookingId);
     if (!booking) throw new AppError("Booking not found", 404);
@@ -99,6 +103,7 @@ export const confirmBooking = async (req, res) => {
 
     res.redirect("/bookings");
   } catch (err) {
-    res.render("error", { message: err.message });
+    console.error("Error in confirmBooking:", err);
+    next(err);
   }
 };

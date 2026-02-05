@@ -14,7 +14,7 @@ export const showLoginForm = (req, res) => {
 /**
  * Xử lý đăng nhập - check email + password, lưu id + role vào session
  */
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -50,6 +50,7 @@ export const login = async (req, res) => {
 
     res.redirect("/bookings");
   } catch (err) {
+    console.error("Error in login:", err);
     res.render("auth/login", {
       error: err.message || "Đăng nhập thất bại."
     });
