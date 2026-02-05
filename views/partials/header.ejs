@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Car Rental System</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f5f6fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 90%;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 20px;
+      background-color: #2c3e50;
+      color: white;
+    }
+
+    nav {
+      background-color: #34495e;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    nav .nav-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    nav a {
+      color: white;
+      margin-right: 20px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    th {
+      background-color: #2980b9;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    tr:hover {
+      background-color: #f0f8ff;
+    }
+
+    button {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #219150;
+    }
+
+    .btn-secondary {
+      background-color: #3498db;
+    }
+
+    .btn-danger {
+      background-color: #e74c3c;
+    }
+
+    form {
+      margin-bottom: 15px;
+    }
+
+    input, select {
+      padding: 8px;
+      margin-right: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .error {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🚗 Car Rental Management</h1>
+
+<nav>
+  <a href="/bookings">Booking</a>
+  <a href="/cars">Car</a>
+  <% if (typeof user !== 'undefined' && user) { %>
+    <a href="/users/<%= user.id %>/bookings">My Bookings</a>
+    <% if (user.role === 'owner' || user.role === 'admin') { %>
+      <a href="/users/my-car-bookings">My Car Bookings</a>
+    <% } %>
+    <% if (user.role === 'admin') { %>
+      <a href="/users/bookings/summary">Summary</a>
+    <% } %>
+    <span class="nav-right">
+      <span style="color:#bdc3c7;"><%= user.name %> (<%= user.role %>)</span>
+      <form action="/auth/logout" method="POST" style="display: inline;">
+        <button type="submit" class="btn-logout" style="background:#e74c3c; padding:6px 12px; border:none; color:white; border-radius:4px; cursor:pointer;">Logout</button>
+      </form>
+    </span>
+  <% } else { %>
+    <a href="/auth/login" class="nav-right">Login</a>
+  <% } %>
+</nav>
+
+<div class="container">

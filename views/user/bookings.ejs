@@ -1,0 +1,29 @@
+<%- include("../partials/header") %>
+
+<div class="card">
+  <h2>👤 My Bookings</h2>
+
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Car</th>
+      <th>Status</th>
+      <th>Total</th>
+    </tr>
+
+    <% bookings.forEach((b, i) => { %>
+      <tr>
+        <td><%= i + 1 %></td>
+        <td><%= b.car_id?.name || b.car_id %></td>
+        <td>
+          <span class="status-badge <%= b.status === 'confirmed' ? 'confirmed' : 'pending' %>">
+          <%= b.status.toUpperCase() %>
+          </span>
+        </td>
+        <td>$<%= b.total_cost %></td>
+      </tr>
+    <% }) %>
+  </table>
+</div>
+
+<%- include("../partials/footer") %>

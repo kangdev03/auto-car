@@ -1,0 +1,45 @@
+<%- include("../partials/header") %>
+
+<div class="card">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h2>📑 Booking List</h2>
+    <div>
+      <% if (typeof user !== 'undefined' && user) { %>
+        <a href="/bookings/create"><button>+ Create Booking</button></a>
+      <% } %>
+      <span style="color:#888; margin-left:10px;">Total: <%= bookings.length %></span>
+    </div>
+  </div>
+
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Car</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+
+    <% bookings.forEach((b, i) => { %>
+      <tr>
+        <td><%= i + 1 %></td>
+        <td>
+          <strong><%= b.car_id?.name || b.car_id %></strong>
+        </td>
+        <td>
+          <% if (b.status === 'confirmed') { %>
+            <span style="color:#27ae60; font-weight:bold;">CONFIRMED</span>
+          <% } else { %>
+            <span style="color:#e67e22; font-weight:bold;">PENDING</span>
+          <% } %>
+        </td>
+        <td>
+          <a href="/bookings/<%= b._id %>">
+            <button class="btn-secondary">Detail</button>
+          </a>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+</div>
+
+<%- include("../partials/footer") %>

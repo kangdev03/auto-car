@@ -1,0 +1,25 @@
+<%- include("../partials/header") %>
+
+<div class="card" style="max-width:600px; margin:auto;">
+  <h2>📄 Booking Detail</h2>
+
+  <div style="margin:15px 0;">
+    <p><strong>Car:</strong> <%= booking.car_id?.name %></p>
+    <p><strong>Status:</strong>
+      <% if (booking.status === 'confirmed') { %>
+        <span style="color:#27ae60; font-weight:bold;">CONFIRMED</span>
+      <% } else { %>
+        <span style="color:#e67e22; font-weight:bold;">PENDING</span>
+      <% } %>
+    </p>
+    <p><strong>Total Cost:</strong> $<%= booking.total_cost %></p>
+  </div>
+
+  <% if (booking.status !== 'confirmed') { %>
+    <form method="POST" action="/bookings/<%= booking._id %>/confirm">
+      <button>Confirm Booking</button>
+    </form>
+  <% } %>
+</div>
+
+<%- include("../partials/footer") %>

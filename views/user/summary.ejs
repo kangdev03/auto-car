@@ -1,0 +1,18 @@
+<%- include("../partials/header") %>
+
+<div class="card" style="max-width:500px;">
+  <h2>📊 Booking Summary</h2>
+
+  <p><strong>Total bookings:</strong> <%= total %></p>
+
+  <ul style="line-height:1.8">
+    <% for (let s in byStatus) { %>
+      <li>
+        <strong><%= s %></strong> :
+        <span style="color:#2980b9;"><%= byStatus[s] %></span>
+      </li>
+    <% } %>
+  </ul>
+</div>
+
+<%- include("../partials/footer") %>

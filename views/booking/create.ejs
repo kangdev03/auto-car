@@ -1,0 +1,32 @@
+<%- include("../partials/header") %>
+
+<div class="card">
+  <h2>Create Booking</h2>
+
+  <form action="/bookings" method="POST">
+
+    <label>Car</label><br>
+  <select name="carId" required>
+    <option value="">-- Select car --</option>
+    <% cars.forEach(car => { %>
+      <option value="<%= car._id %>" <%= (typeof preselectedCarId !== 'undefined' && preselectedCarId && car._id.toString() === preselectedCarId) ? 'selected' : '' %>>
+        <%= car.name %> - <%= car.pricePerDay %>/day
+      </option>
+    <% }) %>
+  </select>
+  <br><br>
+
+  <label>Start Date</label><br>
+  <input type="date" name="startDate" required>
+  <br><br>
+
+  <label>End Date</label><br>
+  <input type="date" name="endDate" required>
+  <br><br>
+
+    <button type="submit">Create</button>
+    <a href="/bookings">Cancel</a>
+  </form>
+</div>
+
+<%- include("../partials/footer") %>
