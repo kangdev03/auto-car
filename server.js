@@ -32,12 +32,31 @@ app.use((req, res, next) => {
 app.set("view engine", "ejs");
 app.set("views", "./views");
 
+app.get("/", (req, res) => {
+  res.redirect("/cars");
+});
+
 app.use("/auth", authRoutes);
 app.use("/bookings", bookingRoutes);
 app.use("/users", userRoutes);
 app.use("/cars", carRoutes);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).render("error", {
+    message: err.message || "Internal Server Error",
+    error: process.env.NODE_ENV === "development" ? err : {}
+  });
 });
+
+// For local development
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// Export for Vercel
+export default app;
